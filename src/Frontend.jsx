@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import {
-  Phone, Mail, MapPin, Instagram, Facebook,
-  ChevronLeft, X, ChevronRight, ChevronLeft as Prev,
-  Send, Check
+  Phone, Mail, MapPin, Instagram,
+  ChevronLeft, X, ChevronRight, Send, Check
 } from 'lucide-react';
 
 // ── 假資料 ──────────────────────────────────────────────
@@ -13,6 +12,7 @@ const DESIGNER = {
   email:   'design@studio.com',
   address: '香港九龍觀塘',
   ig:      '@designstudio_hk',
+  wechat:  'designstudio_hk',
   avatar:  'https://placehold.co/120x120/1e293b/94a3b8?text=袁',
   bio:     '超過 10 年室內設計經驗，專注住宅及商業空間，致力為每位客戶創造獨特而實用的生活空間。',
 };
@@ -92,24 +92,28 @@ const STYLES = ['全部風格','現代簡約','北歐風','工業風','日式'];
 // ── 樣式 ────────────────────────────────────────────────
 const S = {
   page:    { display:'flex', minHeight:'100vh', background:'#0a0f1a', color:'#e2e8f0', fontFamily:'system-ui,sans-serif' },
-
-  // 左側欄
-  sidebar: {
-    width:260, flexShrink:0, background:'#111827',
-    borderRight:'1px solid #1f2937',
-    display:'flex', flexDirection:'column',
-    position:'sticky', top:0, height:'100vh', overflow:'auto',
-  },
-
-  // 右主內容
-  main: { flex:1, overflow:'auto' },
+  sidebar: { width:260, flexShrink:0, background:'#111827', borderRight:'1px solid #1f2937',
+             display:'flex', flexDirection:'column', position:'sticky', top:0, height:'100vh', overflow:'auto' },
+  main:    { flex:1, overflow:'auto' },
 };
 
-// ── 左側欄：設計師資料 ───────────────────────────────────
-function Sidebar({ onContact }) {
+// ── WeChat SVG Icon ──────────────────────────────────────
+const WeChatIcon = () => (
+  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+    stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+    <path d="M8.5 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+    <path d="M14 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+    <path d="M17.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+    <path d="M12.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+    <path d="M21 12c0-4.418-4.03-8-9-8s-9 3.582-9 8c0 1.98.78 3.8 2.07 5.19L4 20l3.29-.82A9.5 9.5 0 0 0 12 20c4.97 0 9-3.582 9-8Z"/>
+  </svg>
+);
+
+// ── 左側欄 ───────────────────────────────────────────────
+function Sidebar({ onEnterAdmin }) {
   return (
     <aside style={S.sidebar}>
-      <div style={{ padding:28, display:'flex', flexDirection:'column', gap:0 }}>
+      <div style={{ padding:28, display:'flex', flexDirection:'column', flex:1 }}>
 
         {/* 相片 + 名字 */}
         <div style={{ textAlign:'center', marginBottom:24 }}>
@@ -120,7 +124,6 @@ function Sidebar({ onContact }) {
           <div style={{ fontSize:12, color:'#64748b', marginTop:4 }}>{DESIGNER.title}</div>
         </div>
 
-        {/* 分隔線 */}
         <div style={{ borderTop:'1px solid #1f2937', marginBottom:20 }}/>
 
         {/* 簡介 */}
@@ -128,34 +131,29 @@ function Sidebar({ onContact }) {
           {DESIGNER.bio}
         </p>
 
-        {/* 分隔線 */}
         <div style={{ borderTop:'1px solid #1f2937', marginBottom:20 }}/>
 
         {/* 聯絡資訊 */}
         <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:24 }}>
           {[
-            { icon:<Phone size={13}/>,   text:DESIGNER.phone   },
-            { icon:<Mail size={13}/>,    text:DESIGNER.email   },
-            { icon:<MapPin size={13}/>,  text:DESIGNER.address },
-            { icon:<Instagram size={13}/>, text:DESIGNER.ig    },
-          ].map(({icon,text})=>(
+            { icon:<Phone     size={13}/>, text: DESIGNER.phone   },
+            { icon:<Mail      size={13}/>, text: DESIGNER.email   },
+            { icon:<MapPin    size={13}/>, text: DESIGNER.address },
+            { icon:<Instagram size={13}/>, text: DESIGNER.ig      },
+            { icon:<WeChatIcon/>,          text: DESIGNER.wechat, label:'WeChat' },
+          ].map(({ icon, text, label })=>(
             <div key={text} style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
               <span style={{ color:'#3b82f6', flexShrink:0 }}>{icon}</span>
-              {text}
+              <span>
+                {label && <span style={{ color:'#64748b', marginRight:4 }}>{label}:</span>}
+                {text}
+              </span>
             </div>
           ))}
         </div>
 
-        {/* 聯絡按鈕 */}
-        <button onClick={onContact}
-          style={{ width:'100%', padding:'10px 0', background:'#2563eb', color:'#fff',
-            border:'none', borderRadius:10, fontWeight:700, fontSize:13, cursor:'pointer',
-            letterSpacing:0.5 }}>
-          ✉️ 聯絡我
-        </button>
-
         {/* 統計 */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginTop:24 }}>
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
           {[['10+','年經驗'],['50+','完成案例'],['100%','客戶滿意']].map(([val,lab])=>(
             <div key={lab} style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 8px', textAlign:'center' }}>
               <div style={{ fontSize:18, fontWeight:800, color:'#3b82f6' }}>{val}</div>
@@ -163,6 +161,17 @@ function Sidebar({ onContact }) {
             </div>
           ))}
         </div>
+
+        {/* 管理後台按鈕（低調放最底） */}
+        <button onClick={onEnterAdmin}
+          style={{ marginTop:'auto', paddingTop:32, width:'100%', padding:'8px 0',
+            background:'transparent', border:'1px solid #1f2937', borderRadius:8,
+            color:'#334155', fontSize:11, cursor:'pointer', letterSpacing:0.5,
+            transition:'all 0.2s', marginTop:32 }}
+          onMouseEnter={e=>{ e.currentTarget.style.borderColor='#3b82f6'; e.currentTarget.style.color='#64748b'; }}
+          onMouseLeave={e=>{ e.currentTarget.style.borderColor='#1f2937'; e.currentTarget.style.color='#334155'; }}>
+          ⚙️ 管理後台
+        </button>
 
       </div>
     </aside>
@@ -173,20 +182,27 @@ function Sidebar({ onContact }) {
 function ProjectCard({ project, onClick }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <div onClick={onClick} onMouseEnter={()=>setHovered(true)} onMouseLeave={()=>setHovered(false)}
+    <div onClick={onClick}
+      onMouseEnter={()=>setHovered(true)}
+      onMouseLeave={()=>setHovered(false)}
       style={{ background:'#111827', border:`1px solid ${hovered?'#2563eb':'#1f2937'}`,
         borderRadius:12, overflow:'hidden', cursor:'pointer',
         transform: hovered?'translateY(-4px)':'none',
-        transition:'all 0.2s', boxShadow: hovered?'0 8px 24px rgba(37,99,235,0.15)':'none' }}>
+        transition:'all 0.2s',
+        boxShadow: hovered?'0 8px 24px rgba(37,99,235,0.15)':'none' }}>
       <div style={{ position:'relative', overflow:'hidden' }}>
         <img src={project.cover} alt={project.title}
           style={{ width:'100%', height:180, objectFit:'cover', display:'block',
             transform: hovered?'scale(1.05)':'scale(1)', transition:'transform 0.3s' }}/>
         <div style={{ position:'absolute', top:10, left:10, display:'flex', gap:6 }}>
-          <span style={{ background:'rgba(37,99,235,0.9)', color:'#fff', fontSize:10,
-            fontWeight:700, padding:'3px 8px', borderRadius:20 }}>{project.category}</span>
-          <span style={{ background:'rgba(0,0,0,0.7)', color:'#94a3b8', fontSize:10,
-            padding:'3px 8px', borderRadius:20 }}>{project.style}</span>
+          <span style={{ background:'rgba(37,99,235,0.9)', color:'#fff',
+            fontSize:10, fontWeight:700, padding:'3px 8px', borderRadius:20 }}>
+            {project.category}
+          </span>
+          <span style={{ background:'rgba(0,0,0,0.7)', color:'#94a3b8',
+            fontSize:10, padding:'3px 8px', borderRadius:20 }}>
+            {project.style}
+          </span>
         </div>
       </div>
       <div style={{ padding:'14px 16px' }}>
@@ -215,7 +231,7 @@ function ProjectList({ onSelect }) {
   return (
     <div style={{ padding:28 }}>
 
-      {/* 頁面標題 */}
+      {/* 標題 */}
       <div style={{ marginBottom:24 }}>
         <h1 style={{ margin:0, fontSize:22, fontWeight:800 }}>設計案例</h1>
         <p style={{ margin:'6px 0 0', fontSize:13, color:'#64748b' }}>
@@ -225,27 +241,30 @@ function ProjectList({ onSelect }) {
 
       {/* 篩選 */}
       <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:24 }}>
+
         {/* 分類 */}
-        <div style={{ display:'flex', gap:4, background:'#111827', padding:4, borderRadius:10, border:'1px solid #1f2937' }}>
+        <div style={{ display:'flex', gap:4, background:'#111827', padding:4,
+          borderRadius:10, border:'1px solid #1f2937' }}>
           {CATS.map(c=>(
             <button key={c} onClick={()=>setCat(c)}
               style={{ padding:'5px 14px', borderRadius:7, border:'none', cursor:'pointer',
                 fontSize:12, fontWeight:600,
-                background: cat===c?'#2563eb':'transparent',
-                color:      cat===c?'#fff':'#64748b' }}>
+                background: cat===c ? '#2563eb' : 'transparent',
+                color:      cat===c ? '#fff'    : '#64748b' }}>
               {c}
             </button>
           ))}
         </div>
 
         {/* 風格 */}
-        <div style={{ display:'flex', gap:4, background:'#111827', padding:4, borderRadius:10, border:'1px solid #1f2937' }}>
+        <div style={{ display:'flex', gap:4, background:'#111827', padding:4,
+          borderRadius:10, border:'1px solid #1f2937' }}>
           {STYLES.map(s=>(
             <button key={s} onClick={()=>setStyle(s)}
               style={{ padding:'5px 14px', borderRadius:7, border:'none', cursor:'pointer',
                 fontSize:12, fontWeight:600,
-                background: style===s?'#7c3aed':'transparent',
-                color:      style===s?'#fff':'#64748b' }}>
+                background: style===s ? '#7c3aed' : 'transparent',
+                color:      style===s ? '#fff'    : '#64748b' }}>
               {s}
             </button>
           ))}
@@ -270,7 +289,7 @@ function ProjectList({ onSelect }) {
 
 // ── 案例詳情 ─────────────────────────────────────────────
 function ProjectDetail({ project, onBack }) {
-  const [current, setCurrent] = useState(0);
+  const [current,  setCurrent]  = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
   const prev = () => setCurrent(i => (i - 1 + project.images.length) % project.images.length);
@@ -289,30 +308,29 @@ function ProjectDetail({ project, onBack }) {
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 280px', gap:24 }}>
 
-        {/* 左：圖片 Gallery */}
+        {/* 左：Gallery */}
         <div>
           {/* 主圖 */}
-          <div style={{ position:'relative', borderRadius:12, overflow:'hidden', marginBottom:12, cursor:'pointer' }}
+          <div style={{ position:'relative', borderRadius:12, overflow:'hidden',
+            marginBottom:12, cursor:'pointer' }}
             onClick={()=>setLightbox(true)}>
             <img src={project.images[current]} alt=""
               style={{ width:'100%', height:380, objectFit:'cover', display:'block' }}/>
-            {/* 箭頭 */}
             {project.images.length > 1 && <>
               <button onClick={e=>{e.stopPropagation();prev();}}
                 style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)',
                   background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
-                  width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center',
-                  cursor:'pointer', color:'#fff' }}>
-                <Prev size={16}/>
+                  width:36, height:36, display:'flex', alignItems:'center',
+                  justifyContent:'center', cursor:'pointer', color:'#fff' }}>
+                <ChevronLeft size={16}/>
               </button>
               <button onClick={e=>{e.stopPropagation();next();}}
                 style={{ position:'absolute', right:12, top:'50%', transform:'translateY(-50%)',
                   background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
-                  width:36, height:36, display:'flex', alignItems:'center', justifyContent:'center',
-                  cursor:'pointer', color:'#fff' }}>
+                  width:36, height:36, display:'flex', alignItems:'center',
+                  justifyContent:'center', cursor:'pointer', color:'#fff' }}>
                 <ChevronRight size={16}/>
               </button>
-              {/* 頁數 */}
               <div style={{ position:'absolute', bottom:12, right:12,
                 background:'rgba(0,0,0,0.7)', color:'#fff', fontSize:11,
                 padding:'3px 10px', borderRadius:20 }}>
@@ -325,14 +343,15 @@ function ProjectDetail({ project, onBack }) {
           <div style={{ display:'flex', gap:8 }}>
             {project.images.map((img,i)=>(
               <img key={i} src={img} alt="" onClick={()=>setCurrent(i)}
-                style={{ width:70, height:48, objectFit:'cover', borderRadius:6, cursor:'pointer',
+                style={{ width:70, height:48, objectFit:'cover', borderRadius:6,
+                  cursor:'pointer', transition:'all 0.15s',
                   border:`2px solid ${current===i?'#2563eb':'transparent'}`,
-                  opacity: current===i?1:0.6, transition:'all 0.15s' }}/>
+                  opacity: current===i ? 1 : 0.6 }}/>
             ))}
           </div>
         </div>
 
-        {/* 右：項目資料 */}
+        {/* 右：資料 */}
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           <div>
             <div style={{ display:'flex', gap:6, marginBottom:10 }}>
@@ -393,7 +412,7 @@ function ProjectDetail({ project, onBack }) {
             style={{ position:'absolute', left:20, background:'rgba(255,255,255,0.1)',
               border:'none', borderRadius:'50%', width:44, height:44, cursor:'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
-            <Prev size={20}/>
+            <ChevronLeft size={20}/>
           </button>
           <img src={project.images[current]} alt=""
             style={{ maxWidth:'90vw', maxHeight:'85vh', borderRadius:8, objectFit:'contain' }}
@@ -410,82 +429,13 @@ function ProjectDetail({ project, onBack }) {
   );
 }
 
-// ── 聯絡表單 Modal ───────────────────────────────────────
-function ContactModal({ onClose }) {
-  const [sent, setSent] = useState(false);
-
-  return (
-    <div style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.8)',
-      display:'flex', alignItems:'center', justifyContent:'center', zIndex:500, padding:20 }}>
-      <div style={{ background:'#111827', border:'1px solid #1f2937', borderRadius:16,
-        width:'100%', maxWidth:440, padding:28, position:'relative' }}>
-
-        <button onClick={onClose}
-          style={{ position:'absolute', top:16, right:16, background:'transparent',
-            border:'none', color:'#64748b', cursor:'pointer' }}>
-          <X size={18}/>
-        </button>
-
-        {sent ? (
-          <div style={{ textAlign:'center', padding:'20px 0' }}>
-            <div style={{ width:56, height:56, background:'rgba(34,197,94,0.1)',
-              borderRadius:'50%', display:'flex', alignItems:'center',
-              justifyContent:'center', margin:'0 auto 16px' }}>
-              <Check size={24} color="#22c55e"/>
-            </div>
-            <div style={{ fontWeight:700, fontSize:16, marginBottom:8 }}>已成功傳送！</div>
-            <div style={{ color:'#64748b', fontSize:13 }}>我們會盡快與你聯絡</div>
-          </div>
-        ) : (
-          <>
-            <h3 style={{ margin:'0 0 20px', fontSize:17, fontWeight:800 }}>聯絡我們</h3>
-
-            {[
-              { label:'姓名',    placeholder:'你的名字',       type:'text'  },
-              { label:'電話',    placeholder:'9123 4567',      type:'tel'   },
-              { label:'電郵',    placeholder:'email@example.com', type:'email' },
-            ].map(({label,placeholder,type})=>(
-              <div key={label} style={{ marginBottom:14 }}>
-                <label style={{ fontSize:11, fontWeight:600, color:'#64748b',
-                  display:'block', marginBottom:5 }}>{label}</label>
-                <input type={type} placeholder={placeholder}
-                  style={{ width:'100%', background:'#0a0f1a', border:'1px solid #1f2937',
-                    borderRadius:8, padding:'9px 12px', color:'#e2e8f0',
-                    fontSize:13, outline:'none', boxSizing:'border-box' }}/>
-              </div>
-            ))}
-
-            <div style={{ marginBottom:18 }}>
-              <label style={{ fontSize:11, fontWeight:600, color:'#64748b',
-                display:'block', marginBottom:5 }}>查詢內容</label>
-              <textarea placeholder="請描述你的裝修需求、面積、預算等..." rows={3}
-                style={{ width:'100%', background:'#0a0f1a', border:'1px solid #1f2937',
-                  borderRadius:8, padding:'9px 12px', color:'#e2e8f0', fontSize:13,
-                  outline:'none', resize:'vertical', boxSizing:'border-box' }}/>
-            </div>
-
-            <button onClick={()=>setSent(true)}
-              style={{ width:'100%', padding:'11px 0', background:'#2563eb',
-                color:'#fff', border:'none', borderRadius:10, fontWeight:700,
-                fontSize:13, cursor:'pointer', display:'flex',
-                alignItems:'center', justifyContent:'center', gap:8 }}>
-              <Send size={13}/> 傳送查詢
-            </button>
-          </>
-        )}
-      </div>
-    </div>
-  );
-}
-
 // ── 主體 ─────────────────────────────────────────────────
-export default function Frontend() {
+export default function Frontend({ onEnterAdmin }) {
   const [selected, setSelected] = useState(null);
-  const [contact,  setContact]  = useState(false);
 
   return (
     <div style={S.page}>
-      <Sidebar onContact={()=>setContact(true)}/>
+      <Sidebar onEnterAdmin={onEnterAdmin}/>
 
       <main style={S.main}>
         {selected
@@ -493,8 +443,6 @@ export default function Frontend() {
           : <ProjectList   onSelect={setSelected}/>
         }
       </main>
-
-      {contact && <ContactModal onClose={()=>setContact(false)}/>}
     </div>
   );
 }
