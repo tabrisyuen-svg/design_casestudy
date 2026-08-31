@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import {
   Phone, Mail, MapPin, Instagram,
-  ChevronLeft, X, ChevronRight, Send, Check
+  ChevronLeft, ChevronRight, X
 } from 'lucide-react';
 
 // ── 假資料 ──────────────────────────────────────────────
@@ -21,7 +21,7 @@ const PROJECTS = [
   {
     id:1, title:'九龍灣私人住宅', category:'住宅', style:'現代簡約',
     year:2024, area:850, location:'九龍灣',
-    desc:'整個項目以現代簡約風格為主調，充分利用空間採光，打造寬敞明亮的居住環境。開放式廚房與客廳相連，增加互動空間。',
+    desc:'整個項目以現代簡約風格為主調，充分利用空間採光，打造寬敞明亮的居住環境。',
     cover:'https://placehold.co/400x260/1e293b/475569?text=九龍灣住宅',
     images:[
       'https://placehold.co/800x500/1e293b/475569?text=客廳',
@@ -33,7 +33,7 @@ const PROJECTS = [
   {
     id:2, title:'中環咖啡店', category:'商業', style:'工業風',
     year:2024, area:420, location:'中環',
-    desc:'以工業風為設計主題，裸露天花配合溫暖燈光，營造舒適的咖啡廳氛圍。選用回收木材作為主要裝飾元素。',
+    desc:'以工業風為設計主題，裸露天花配合溫暖燈光，營造舒適的咖啡廳氛圍。',
     cover:'https://placehold.co/400x260/1e293b/475569?text=中環咖啡店',
     images:[
       'https://placehold.co/800x500/1e293b/475569?text=大堂',
@@ -44,7 +44,7 @@ const PROJECTS = [
   {
     id:3, title:'沙田辦公室翻新', category:'辦公室', style:'北歐風',
     year:2023, area:1200, location:'沙田',
-    desc:'北歐風辦公室設計，以白色為基調配合木紋元素，打造舒適的工作環境，提升員工生產力。',
+    desc:'北歐風辦公室設計，以白色為基調配合木紋元素，打造舒適的工作環境。',
     cover:'https://placehold.co/400x260/1e293b/475569?text=沙田辦公室',
     images:[
       'https://placehold.co/800x500/1e293b/475569?text=開放工作區',
@@ -55,7 +55,7 @@ const PROJECTS = [
   {
     id:4, title:'屯門複式單位', category:'住宅', style:'日式',
     year:2023, area:950, location:'屯門',
-    desc:'日式簡約風格，善用複式結構打造層次感，木材與石材的結合帶出自然溫暖的感覺。',
+    desc:'日式簡約風格，善用複式結構打造層次感，木材與石材帶出自然溫暖的感覺。',
     cover:'https://placehold.co/400x260/1e293b/475569?text=屯門複式',
     images:[
       'https://placehold.co/800x500/1e293b/475569?text=客廳',
@@ -86,10 +86,9 @@ const PROJECTS = [
   },
 ];
 
-const CATS   = ['全部','住宅','商業','辦公室'];
-const STYLES = ['全部風格','現代簡約','北歐風','工業風','日式'];
+const CATS   = ['全部', '住宅', '商業', '辦公室'];
+const STYLES = ['全部風格', '現代簡約', '北歐風', '工業風', '日式'];
 
-// ── 樣式 ────────────────────────────────────────────────
 const S = {
   page:    { display:'flex', minHeight:'100vh', background:'#0a0f1a', color:'#e2e8f0', fontFamily:'system-ui,sans-serif' },
   sidebar: { width:260, flexShrink:0, background:'#111827', borderRight:'1px solid #1f2937',
@@ -97,79 +96,99 @@ const S = {
   main:    { flex:1, overflow:'auto' },
 };
 
-// ── WeChat SVG Icon ──────────────────────────────────────
-const WeChatIcon = () => (
-  <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
-    stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-    <path d="M8.5 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
-    <path d="M14 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
-    <path d="M17.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
-    <path d="M12.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
-    <path d="M21 12c0-4.418-4.03-8-9-8s-9 3.582-9 8c0 1.98.78 3.8 2.07 5.19L4 20l3.29-.82A9.5 9.5 0 0 0 12 20c4.97 0 9-3.582 9-8Z"/>
-  </svg>
-);
+// ── WeChat Icon ──────────────────────────────────────────
+function WeChatIcon() {
+  return (
+    <svg width="13" height="13" viewBox="0 0 24 24" fill="none"
+      stroke="#3b82f6" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M8.5 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+      <path d="M14 10.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+      <path d="M17.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+      <path d="M12.5 14.5a.5.5 0 1 0 1 0 .5.5 0 0 0-1 0Z"/>
+      <path d="M21 12c0-4.418-4.03-8-9-8s-9 3.582-9 8c0 1.98.78 3.8 2.07 5.19L4 20l3.29-.82A9.5 9.5 0 0 0 12 20c4.97 0 9-3.582 9-8Z"/>
+    </svg>
+  );
+}
 
-// ── 左側欄 ───────────────────────────────────────────────
+// ── Sidebar ──────────────────────────────────────────────
 function Sidebar({ onEnterAdmin }) {
   return (
     <aside style={S.sidebar}>
-      <div style={{ padding:28, display:'flex', flexDirection:'column', flex:1 }}>
+      <div style={{ padding:28, display:'flex', flexDirection:'column' }}>
 
-        {/* 相片 + 名字 */}
         <div style={{ textAlign:'center', marginBottom:24 }}>
           <img src={DESIGNER.avatar} alt="designer"
             style={{ width:100, height:100, borderRadius:'50%', objectFit:'cover',
               border:'3px solid #2563eb', marginBottom:12 }}/>
-          <div style={{ fontWeight:800, fontSize:18, letterSpacing:0.5 }}>{DESIGNER.name}</div>
+          <div style={{ fontWeight:800, fontSize:18 }}>{DESIGNER.name}</div>
           <div style={{ fontSize:12, color:'#64748b', marginTop:4 }}>{DESIGNER.title}</div>
         </div>
 
         <div style={{ borderTop:'1px solid #1f2937', marginBottom:20 }}/>
 
-        {/* 簡介 */}
         <p style={{ fontSize:12, color:'#94a3b8', lineHeight:1.8, marginBottom:20 }}>
           {DESIGNER.bio}
         </p>
 
         <div style={{ borderTop:'1px solid #1f2937', marginBottom:20 }}/>
 
-        {/* 聯絡資訊 */}
         <div style={{ display:'flex', flexDirection:'column', gap:12, marginBottom:24 }}>
-          {[
-            { icon:<Phone     size={13}/>, text: DESIGNER.phone   },
-            { icon:<Mail      size={13}/>, text: DESIGNER.email   },
-            { icon:<MapPin    size={13}/>, text: DESIGNER.address },
-            { icon:<Instagram size={13}/>, text: DESIGNER.ig      },
-            { icon:<WeChatIcon/>,          text: DESIGNER.wechat, label:'WeChat' },
-          ].map(({ icon, text, label })=>(
-            <div key={text} style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
-              <span style={{ color:'#3b82f6', flexShrink:0 }}>{icon}</span>
-              <span>
-                {label && <span style={{ color:'#64748b', marginRight:4 }}>{label}:</span>}
-                {text}
-              </span>
-            </div>
-          ))}
+
+          <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
+            <span style={{ color:'#3b82f6', flexShrink:0 }}><Phone size={13}/></span>
+            <span>{DESIGNER.phone}</span>
+          </div>
+
+          <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
+            <span style={{ color:'#3b82f6', flexShrink:0 }}><Mail size={13}/></span>
+            <span>{DESIGNER.email}</span>
+          </div>
+
+          <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
+            <span style={{ color:'#3b82f6', flexShrink:0 }}><MapPin size={13}/></span>
+            <span>{DESIGNER.address}</span>
+          </div>
+
+          <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
+            <span style={{ color:'#3b82f6', flexShrink:0 }}><Instagram size={13}/></span>
+            <span>{DESIGNER.ig}</span>
+          </div>
+
+          <div style={{ display:'flex', alignItems:'center', gap:10, fontSize:12, color:'#94a3b8' }}>
+            <span style={{ color:'#3b82f6', flexShrink:0 }}><WeChatIcon/></span>
+            <span><span style={{ color:'#64748b', marginRight:4 }}>WeChat:</span>{DESIGNER.wechat}</span>
+          </div>
+
         </div>
 
-        {/* 統計 */}
-        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-          {[['10+','年經驗'],['50+','完成案例'],['100%','客戶滿意']].map(([val,lab])=>(
-            <div key={lab} style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 8px', textAlign:'center' }}>
-              <div style={{ fontSize:18, fontWeight:800, color:'#3b82f6' }}>{val}</div>
-              <div style={{ fontSize:10, color:'#64748b', marginTop:2 }}>{lab}</div>
-            </div>
-          ))}
+        <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8, marginBottom:32 }}>
+          <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 8px', textAlign:'center' }}>
+            <div style={{ fontSize:18, fontWeight:800, color:'#3b82f6' }}>10+</div>
+            <div style={{ fontSize:10, color:'#64748b', marginTop:2 }}>年經驗</div>
+          </div>
+          <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 8px', textAlign:'center' }}>
+            <div style={{ fontSize:18, fontWeight:800, color:'#3b82f6' }}>50+</div>
+            <div style={{ fontSize:10, color:'#64748b', marginTop:2 }}>完成案例</div>
+          </div>
+          <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 8px', textAlign:'center' }}>
+            <div style={{ fontSize:18, fontWeight:800, color:'#3b82f6' }}>100%</div>
+            <div style={{ fontSize:10, color:'#64748b', marginTop:2 }}>客戶滿意</div>
+          </div>
         </div>
 
-        {/* 管理後台按鈕（低調放最底） */}
-        <button onClick={onEnterAdmin}
-          style={{ marginTop:'auto', paddingTop:32, width:'100%', padding:'8px 0',
-            background:'transparent', border:'1px solid #1f2937', borderRadius:8,
-            color:'#334155', fontSize:11, cursor:'pointer', letterSpacing:0.5,
-            transition:'all 0.2s', marginTop:32 }}
-          onMouseEnter={e=>{ e.currentTarget.style.borderColor='#3b82f6'; e.currentTarget.style.color='#64748b'; }}
-          onMouseLeave={e=>{ e.currentTarget.style.borderColor='#1f2937'; e.currentTarget.style.color='#334155'; }}>
+        <button
+          onClick={onEnterAdmin}
+          style={{ width:'100%', padding:'8px 0', background:'transparent',
+            border:'1px solid #1f2937', borderRadius:8, color:'#334155',
+            fontSize:11, cursor:'pointer', letterSpacing:0.5 }}
+          onMouseEnter={e => {
+            e.currentTarget.style.borderColor = '#3b82f6';
+            e.currentTarget.style.color = '#64748b';
+          }}
+          onMouseLeave={e => {
+            e.currentTarget.style.borderColor = '#1f2937';
+            e.currentTarget.style.color = '#334155';
+          }}>
           ⚙️ 管理後台
         </button>
 
@@ -182,18 +201,19 @@ function Sidebar({ onEnterAdmin }) {
 function ProjectCard({ project, onClick }) {
   const [hovered, setHovered] = useState(false);
   return (
-    <div onClick={onClick}
-      onMouseEnter={()=>setHovered(true)}
-      onMouseLeave={()=>setHovered(false)}
-      style={{ background:'#111827', border:`1px solid ${hovered?'#2563eb':'#1f2937'}`,
+    <div
+      onClick={onClick}
+      onMouseEnter={() => setHovered(true)}
+      onMouseLeave={() => setHovered(false)}
+      style={{ background:'#111827', border:`1px solid ${hovered ? '#2563eb' : '#1f2937'}`,
         borderRadius:12, overflow:'hidden', cursor:'pointer',
-        transform: hovered?'translateY(-4px)':'none',
+        transform: hovered ? 'translateY(-4px)' : 'none',
         transition:'all 0.2s',
-        boxShadow: hovered?'0 8px 24px rgba(37,99,235,0.15)':'none' }}>
+        boxShadow: hovered ? '0 8px 24px rgba(37,99,235,0.15)' : 'none' }}>
       <div style={{ position:'relative', overflow:'hidden' }}>
         <img src={project.cover} alt={project.title}
           style={{ width:'100%', height:180, objectFit:'cover', display:'block',
-            transform: hovered?'scale(1.05)':'scale(1)', transition:'transform 0.3s' }}/>
+            transform: hovered ? 'scale(1.05)' : 'scale(1)', transition:'transform 0.3s' }}/>
         <div style={{ position:'absolute', top:10, left:10, display:'flex', gap:6 }}>
           <span style={{ background:'rgba(37,99,235,0.9)', color:'#fff',
             fontSize:10, fontWeight:700, padding:'3px 8px', borderRadius:20 }}>
@@ -230,52 +250,43 @@ function ProjectList({ onSelect }) {
 
   return (
     <div style={{ padding:28 }}>
-
-      {/* 標題 */}
       <div style={{ marginBottom:24 }}>
         <h1 style={{ margin:0, fontSize:22, fontWeight:800 }}>設計案例</h1>
-        <p style={{ margin:'6px 0 0', fontSize:13, color:'#64748b' }}>
-          共 {filtered.length} 個案例
-        </p>
+        <p style={{ margin:'6px 0 0', fontSize:13, color:'#64748b' }}>共 {filtered.length} 個案例</p>
       </div>
 
-      {/* 篩選 */}
       <div style={{ display:'flex', gap:8, flexWrap:'wrap', marginBottom:24 }}>
-
-        {/* 分類 */}
         <div style={{ display:'flex', gap:4, background:'#111827', padding:4,
           borderRadius:10, border:'1px solid #1f2937' }}>
-          {CATS.map(c=>(
-            <button key={c} onClick={()=>setCat(c)}
+          {CATS.map(c => (
+            <button key={c} onClick={() => setCat(c)}
               style={{ padding:'5px 14px', borderRadius:7, border:'none', cursor:'pointer',
                 fontSize:12, fontWeight:600,
-                background: cat===c ? '#2563eb' : 'transparent',
-                color:      cat===c ? '#fff'    : '#64748b' }}>
+                background: cat === c ? '#2563eb' : 'transparent',
+                color:      cat === c ? '#fff'    : '#64748b' }}>
               {c}
             </button>
           ))}
         </div>
 
-        {/* 風格 */}
         <div style={{ display:'flex', gap:4, background:'#111827', padding:4,
           borderRadius:10, border:'1px solid #1f2937' }}>
-          {STYLES.map(s=>(
-            <button key={s} onClick={()=>setStyle(s)}
+          {STYLES.map(s => (
+            <button key={s} onClick={() => setStyle(s)}
               style={{ padding:'5px 14px', borderRadius:7, border:'none', cursor:'pointer',
                 fontSize:12, fontWeight:600,
-                background: style===s ? '#7c3aed' : 'transparent',
-                color:      style===s ? '#fff'    : '#64748b' }}>
+                background: style === s ? '#7c3aed' : 'transparent',
+                color:      style === s ? '#fff'    : '#64748b' }}>
               {s}
             </button>
           ))}
         </div>
       </div>
 
-      {/* 卡片格 */}
       {filtered.length > 0 ? (
         <div style={{ display:'grid', gridTemplateColumns:'repeat(auto-fill,minmax(240px,1fr))', gap:16 }}>
-          {filtered.map(p=>(
-            <ProjectCard key={p.id} project={p} onClick={()=>onSelect(p)}/>
+          {filtered.map(p => (
+            <ProjectCard key={p.id} project={p} onClick={() => onSelect(p)}/>
           ))}
         </div>
       ) : (
@@ -297,8 +308,6 @@ function ProjectDetail({ project, onBack }) {
 
   return (
     <div style={{ padding:28 }}>
-
-      {/* 返回 */}
       <button onClick={onBack}
         style={{ display:'flex', alignItems:'center', gap:6, background:'transparent',
           border:'1px solid #1f2937', borderRadius:8, padding:'7px 14px',
@@ -308,50 +317,48 @@ function ProjectDetail({ project, onBack }) {
 
       <div style={{ display:'grid', gridTemplateColumns:'1fr 280px', gap:24 }}>
 
-        {/* 左：Gallery */}
         <div>
-          {/* 主圖 */}
           <div style={{ position:'relative', borderRadius:12, overflow:'hidden',
             marginBottom:12, cursor:'pointer' }}
-            onClick={()=>setLightbox(true)}>
+            onClick={() => setLightbox(true)}>
             <img src={project.images[current]} alt=""
               style={{ width:'100%', height:380, objectFit:'cover', display:'block' }}/>
-            {project.images.length > 1 && <>
-              <button onClick={e=>{e.stopPropagation();prev();}}
-                style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)',
-                  background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
-                  width:36, height:36, display:'flex', alignItems:'center',
-                  justifyContent:'center', cursor:'pointer', color:'#fff' }}>
-                <ChevronLeft size={16}/>
-              </button>
-              <button onClick={e=>{e.stopPropagation();next();}}
-                style={{ position:'absolute', right:12, top:'50%', transform:'translateY(-50%)',
-                  background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
-                  width:36, height:36, display:'flex', alignItems:'center',
-                  justifyContent:'center', cursor:'pointer', color:'#fff' }}>
-                <ChevronRight size={16}/>
-              </button>
-              <div style={{ position:'absolute', bottom:12, right:12,
-                background:'rgba(0,0,0,0.7)', color:'#fff', fontSize:11,
-                padding:'3px 10px', borderRadius:20 }}>
-                {current+1} / {project.images.length}
-              </div>
-            </>}
+            {project.images.length > 1 && (
+              <>
+                <button onClick={e => { e.stopPropagation(); prev(); }}
+                  style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)',
+                    background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
+                    width:36, height:36, display:'flex', alignItems:'center',
+                    justifyContent:'center', cursor:'pointer', color:'#fff' }}>
+                  <ChevronLeft size={16}/>
+                </button>
+                <button onClick={e => { e.stopPropagation(); next(); }}
+                  style={{ position:'absolute', right:12, top:'50%', transform:'translateY(-50%)',
+                    background:'rgba(0,0,0,0.6)', border:'none', borderRadius:'50%',
+                    width:36, height:36, display:'flex', alignItems:'center',
+                    justifyContent:'center', cursor:'pointer', color:'#fff' }}>
+                  <ChevronRight size={16}/>
+                </button>
+                <div style={{ position:'absolute', bottom:12, right:12,
+                  background:'rgba(0,0,0,0.7)', color:'#fff', fontSize:11,
+                  padding:'3px 10px', borderRadius:20 }}>
+                  {current + 1} / {project.images.length}
+                </div>
+              </>
+            )}
           </div>
 
-          {/* 縮圖列 */}
           <div style={{ display:'flex', gap:8 }}>
-            {project.images.map((img,i)=>(
-              <img key={i} src={img} alt="" onClick={()=>setCurrent(i)}
+            {project.images.map((img, i) => (
+              <img key={i} src={img} alt="" onClick={() => setCurrent(i)}
                 style={{ width:70, height:48, objectFit:'cover', borderRadius:6,
                   cursor:'pointer', transition:'all 0.15s',
-                  border:`2px solid ${current===i?'#2563eb':'transparent'}`,
-                  opacity: current===i ? 1 : 0.6 }}/>
+                  border:`2px solid ${current === i ? '#2563eb' : 'transparent'}`,
+                  opacity: current === i ? 1 : 0.6 }}/>
             ))}
           </div>
         </div>
 
-        {/* 右：資料 */}
         <div style={{ display:'flex', flexDirection:'column', gap:16 }}>
           <div>
             <div style={{ display:'flex', gap:6, marginBottom:10 }}>
@@ -367,28 +374,30 @@ function ProjectDetail({ project, onBack }) {
             <h2 style={{ margin:'0 0 8px', fontSize:20, fontWeight:800 }}>{project.title}</h2>
           </div>
 
-          {/* 資料格 */}
           <div style={{ display:'grid', gridTemplateColumns:'1fr 1fr', gap:8 }}>
-            {[
-              ['📍 地點', project.location],
-              ['🗓 年份',  project.year],
-              ['📐 面積',  `${project.area} ft²`],
-              ['🎨 風格',  project.style],
-            ].map(([k,v])=>(
-              <div key={k} style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 12px' }}>
-                <div style={{ fontSize:10, color:'#64748b', marginBottom:3 }}>{k}</div>
-                <div style={{ fontSize:13, fontWeight:600 }}>{v}</div>
-              </div>
-            ))}
+            <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 12px' }}>
+              <div style={{ fontSize:10, color:'#64748b', marginBottom:3 }}>📍 地點</div>
+              <div style={{ fontSize:13, fontWeight:600 }}>{project.location}</div>
+            </div>
+            <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 12px' }}>
+              <div style={{ fontSize:10, color:'#64748b', marginBottom:3 }}>🗓 年份</div>
+              <div style={{ fontSize:13, fontWeight:600 }}>{project.year}</div>
+            </div>
+            <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 12px' }}>
+              <div style={{ fontSize:10, color:'#64748b', marginBottom:3 }}>📐 面積</div>
+              <div style={{ fontSize:13, fontWeight:600 }}>{project.area} ft²</div>
+            </div>
+            <div style={{ background:'#0a0f1a', borderRadius:8, padding:'10px 12px' }}>
+              <div style={{ fontSize:10, color:'#64748b', marginBottom:3 }}>🎨 風格</div>
+              <div style={{ fontSize:13, fontWeight:600 }}>{project.style}</div>
+            </div>
           </div>
 
-          {/* 描述 */}
           <div style={{ background:'#0a0f1a', borderRadius:10, padding:14 }}>
             <div style={{ fontSize:11, color:'#64748b', marginBottom:8 }}>項目描述</div>
             <p style={{ margin:0, fontSize:13, color:'#94a3b8', lineHeight:1.8 }}>{project.desc}</p>
           </div>
 
-          {/* 查詢按鈕 */}
           <button style={{ width:'100%', padding:'11px 0', background:'#2563eb',
             color:'#fff', border:'none', borderRadius:10, fontWeight:700,
             fontSize:13, cursor:'pointer' }}>
@@ -397,18 +406,17 @@ function ProjectDetail({ project, onBack }) {
         </div>
       </div>
 
-      {/* Lightbox */}
       {lightbox && (
-        <div onClick={()=>setLightbox(false)}
+        <div onClick={() => setLightbox(false)}
           style={{ position:'fixed', inset:0, background:'rgba(0,0,0,0.95)',
             display:'flex', alignItems:'center', justifyContent:'center', zIndex:1000 }}>
-          <button onClick={()=>setLightbox(false)}
+          <button onClick={() => setLightbox(false)}
             style={{ position:'absolute', top:20, right:20, background:'rgba(255,255,255,0.1)',
               border:'none', borderRadius:'50%', width:40, height:40, cursor:'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
             <X size={18}/>
           </button>
-          <button onClick={e=>{e.stopPropagation();prev();}}
+          <button onClick={e => { e.stopPropagation(); prev(); }}
             style={{ position:'absolute', left:20, background:'rgba(255,255,255,0.1)',
               border:'none', borderRadius:'50%', width:44, height:44, cursor:'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
@@ -416,8 +424,8 @@ function ProjectDetail({ project, onBack }) {
           </button>
           <img src={project.images[current]} alt=""
             style={{ maxWidth:'90vw', maxHeight:'85vh', borderRadius:8, objectFit:'contain' }}
-            onClick={e=>e.stopPropagation()}/>
-          <button onClick={e=>{e.stopPropagation();next();}}
+            onClick={e => e.stopPropagation()}/>
+          <button onClick={e => { e.stopPropagation(); next(); }}
             style={{ position:'absolute', right:20, background:'rgba(255,255,255,0.1)',
               border:'none', borderRadius:'50%', width:44, height:44, cursor:'pointer',
               display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
@@ -436,10 +444,9 @@ export default function Frontend({ onEnterAdmin }) {
   return (
     <div style={S.page}>
       <Sidebar onEnterAdmin={onEnterAdmin}/>
-
       <main style={S.main}>
         {selected
-          ? <ProjectDetail project={selected} onBack={()=>setSelected(null)}/>
+          ? <ProjectDetail project={selected} onBack={() => setSelected(null)}/>
           : <ProjectList   onSelect={setSelected}/>
         }
       </main>
