@@ -1,9 +1,9 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Admin from './Admin'
+import Frontend from './Frontend'
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Admin />
+    <Frontend />
   </React.StrictMode>
 )
