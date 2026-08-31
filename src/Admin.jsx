@@ -44,7 +44,7 @@ function LoginPage({ onLogin }) {
   async function handle(e) {
     e.preventDefault();
     setBusy(true); setErr('');
-    const { data, error } = await supabase.from('designers').select('admin_password').limit(1).single();
+    const { data, error } = await supabase.from('designers').select('admin_password').limit(1).maybeSingle();
     console.log('data:', data);
     console.log('error:', error);
     if (data?.admin_password === pw) { onLogin(); }
