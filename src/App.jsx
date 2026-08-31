@@ -1,7 +1,14 @@
-import Admin from './Admin';
+import React, { useState } from 'react';
+import Frontend from './Frontend';
+import Admin    from './Admin';
 
-// 在 TABS 加：
-{ id: 'admin', label: 'Admin', Icon: Settings }
+export default function App() {
+  const [view, setView] = useState('frontend');
 
-// 在 Content 加：
-{tab === 'admin' && <Admin />}
+  return (
+    <>
+      {view === 'frontend' && <Frontend onEnterAdmin={() => setView('admin')} />}
+      {view === 'admin'    && <Admin    onBack={() => setView('frontend')} />}
+    </>
+  );
+}
