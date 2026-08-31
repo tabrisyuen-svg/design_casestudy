@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import {
+import React, { useState, useEffect } from 'react';
+import { supabase } from './supabase';
   Phone, Mail, MapPin, Instagram,
   ChevronLeft, ChevronRight, X
 } from 'lucide-react';
+import { supabase } from './supabase';
 
-// ── 假資料 ──────────────────────────────────────────────
+// ── 設計師資料 ──────────────────────────────────────────────
 const DESIGNER = {
   name:    '袁設計師',
   title:   '室內設計師 / 創辦人',
@@ -245,13 +246,18 @@ function ProjectList({ onSelect }) {
     </div>
   );
 }
+
 // ── 案例詳情 ─────────────────────────────────────────────
 function ProjectDetail({ project, onBack }) {
   const [current,  setCurrent]  = useState(0);
   const [lightbox, setLightbox] = useState(false);
 
-  const prev = () => setCurrent(i => (i - 1 + project.images.length) % project.images.length);
-  const next = () => setCurrent(i => (i + 1) % project.images.length);
+  const images = Array.isArray(project.images)
+    ? project.images
+    : JSON.parse(project.images || '[]');
+
+  const prev = () => setCurrent(i => (i - 1 + images.length) % images.length);
+  const next = () => setCurrent(i => (i + 1) % images.length);
 
   return (
     <div style={{ padding:28 }}>
@@ -268,9 +274,9 @@ function ProjectDetail({ project, onBack }) {
           <div style={{ position:'relative', borderRadius:12, overflow:'hidden',
             marginBottom:12, cursor:'pointer' }}
             onClick={() => setLightbox(true)}>
-            <img src={project.images[current]} alt=""
+            <img src={images[current]} alt=""
               style={{ width:'100%', height:380, objectFit:'cover', display:'block' }}/>
-            {project.images.length > 1 && (
+            {images.length > 1 && (
               <>
                 <button onClick={e => { e.stopPropagation(); prev(); }}
                   style={{ position:'absolute', left:12, top:'50%', transform:'translateY(-50%)',
@@ -289,14 +295,14 @@ function ProjectDetail({ project, onBack }) {
                 <div style={{ position:'absolute', bottom:12, right:12,
                   background:'rgba(0,0,0,0.7)', color:'#fff', fontSize:11,
                   padding:'3px 10px', borderRadius:20 }}>
-                  {current + 1} / {project.images.length}
+                  {current + 1} / {images.length}
                 </div>
               </>
             )}
           </div>
 
           <div style={{ display:'flex', gap:8 }}>
-            {project.images.map((img, i) => (
+            {images.map((img, i) => (
               <img key={i} src={img} alt="" onClick={() => setCurrent(i)}
                 style={{ width:70, height:48, objectFit:'cover', borderRadius:6,
                   cursor:'pointer', transition:'all 0.15s',
@@ -369,7 +375,7 @@ function ProjectDetail({ project, onBack }) {
               display:'flex', alignItems:'center', justifyContent:'center', color:'#fff' }}>
             <ChevronLeft size={20}/>
           </button>
-          <img src={project.images[current]} alt=""
+          <img src={images[current]} alt=""
             style={{ maxWidth:'90vw', maxHeight:'85vh', borderRadius:8, objectFit:'contain' }}
             onClick={e => e.stopPropagation()}/>
           <button onClick={e => { e.stopPropagation(); next(); }}
