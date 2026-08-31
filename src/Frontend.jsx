@@ -17,75 +17,6 @@ const DESIGNER = {
   bio:     '超過 10 年室內設計經驗，專注住宅及商業空間，致力為每位客戶創造獨特而實用的生活空間。',
 };
 
-const PROJECTS = [
-  {
-    id:1, title:'九龍灣私人住宅', category:'住宅', style:'現代簡約',
-    year:2024, area:850, location:'九龍灣',
-    desc:'整個項目以現代簡約風格為主調，充分利用空間採光，打造寬敞明亮的居住環境。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=九龍灣住宅',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=客廳',
-      'https://placehold.co/800x500/243040/475569?text=主人房',
-      'https://placehold.co/800x500/1a2535/475569?text=廚房',
-      'https://placehold.co/800x500/1e293b/475569?text=浴室',
-    ],
-  },
-  {
-    id:2, title:'中環咖啡店', category:'商業', style:'工業風',
-    year:2024, area:420, location:'中環',
-    desc:'以工業風為設計主題，裸露天花配合溫暖燈光，營造舒適的咖啡廳氛圍。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=中環咖啡店',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=大堂',
-      'https://placehold.co/800x500/243040/475569?text=吧枱',
-      'https://placehold.co/800x500/1a2535/475569?text=座位區',
-    ],
-  },
-  {
-    id:3, title:'沙田辦公室翻新', category:'辦公室', style:'北歐風',
-    year:2023, area:1200, location:'沙田',
-    desc:'北歐風辦公室設計，以白色為基調配合木紋元素，打造舒適的工作環境。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=沙田辦公室',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=開放工作區',
-      'https://placehold.co/800x500/243040/475569?text=會議室',
-      'https://placehold.co/800x500/1a2535/475569?text=休息室',
-    ],
-  },
-  {
-    id:4, title:'屯門複式單位', category:'住宅', style:'日式',
-    year:2023, area:950, location:'屯門',
-    desc:'日式簡約風格，善用複式結構打造層次感，木材與石材帶出自然溫暖的感覺。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=屯門複式',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=客廳',
-      'https://placehold.co/800x500/243040/475569?text=上層睡房',
-      'https://placehold.co/800x500/1a2535/475569?text=浴室',
-    ],
-  },
-  {
-    id:5, title:'旺角精品店', category:'商業', style:'現代簡約',
-    year:2023, area:280, location:'旺角',
-    desc:'小空間大利用，以鏡面和燈光效果擴大視覺空間感，突出產品展示效果。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=旺角精品店',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=店面',
-      'https://placehold.co/800x500/243040/475569?text=展示區',
-    ],
-  },
-  {
-    id:6, title:'將軍澳新居', category:'住宅', style:'工業風',
-    year:2022, area:720, location:'將軍澳',
-    desc:'工業風住宅設計，黑鐵架與木材的完美結合，打造個性鮮明的居住空間。',
-    cover:'https://placehold.co/400x260/1e293b/475569?text=將軍澳新居',
-    images:[
-      'https://placehold.co/800x500/1e293b/475569?text=客廳',
-      'https://placehold.co/800x500/243040/475569?text=書房',
-      'https://placehold.co/800x500/1a2535/475569?text=主人房',
-    ],
-  },
-];
-
 const CATS   = ['全部', '住宅', '商業', '辦公室'];
 const STYLES = ['全部風格', '現代簡約', '北歐風', '工業風', '日式'];
 
@@ -239,14 +170,31 @@ function ProjectCard({ project, onClick }) {
 
 // ── 案例列表 ─────────────────────────────────────────────
 function ProjectList({ onSelect }) {
-  const [cat,   setCat]   = useState('全部');
-  const [style, setStyle] = useState('全部風格');
+  const [cat,      setCat]      = useState('全部');
+  const [style,    setStyle]    = useState('全部風格');
+  const [projects, setProjects] = useState([]);
+  const [loading,  setLoading]  = useState(true);
 
-  const filtered = PROJECTS.filter(p => {
+  useEffect(() => {
+    supabase
+      .from('projects')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .then(({ data }) => {
+        setProjects(data || []);
+        setLoading(false);
+      });
+  }, []);
+
+  const filtered = projects.filter(p => {
     const matchCat   = cat   === '全部'    || p.category === cat;
     const matchStyle = style === '全部風格' || p.style    === style;
     return matchCat && matchStyle;
   });
+
+  if (loading) return (
+    <div style={{ padding:28, color:'#64748b', fontSize:14 }}>載入中...</div>
+  );
 
   return (
     <div style={{ padding:28 }}>
@@ -297,7 +245,6 @@ function ProjectList({ onSelect }) {
     </div>
   );
 }
-
 // ── 案例詳情 ─────────────────────────────────────────────
 function ProjectDetail({ project, onBack }) {
   const [current,  setCurrent]  = useState(0);
