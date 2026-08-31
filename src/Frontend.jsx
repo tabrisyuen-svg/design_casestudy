@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supabase } from './supabase';
+import {
   Phone, Mail, MapPin, Instagram,
   ChevronLeft, ChevronRight, X
 } from 'lucide-react';
